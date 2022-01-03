@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [[ $# != 1 ]]; then
+  echo "usage: unarchiverr <target_dir>"
+  exit 1
+else
+  TARGET_DIR=$1
+fi
+
+pushd $TARGET_DIR
+for file_path in $(find . -type f -name "*.rar"); do
+  dir_path=$(dirname $file_path)
+  if [[ -f $dir_path/EXTRACTED ]]; then
+    echo Already unarchived $file_path
+  else
+    file=$(basename $file_path)
+    pushd $dir_path
+    echo "extracting $file_path..."
+    unrar x $file
+    if [[ $? == 0 ]]; then
+      touch EXTRACTED
+      echo "extracted $file_path"
+    else
+      echo "could not extract $file_path"
+    fi
+    popd &>/dev/null
+  fi
+done
+popd &>/dev/null
