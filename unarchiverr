@@ -11,7 +11,7 @@ pushd $TARGET_DIR
 for file_path in $(find . -type f -name "*.rar"); do
   dir_path=$(dirname $file_path)
   if [[ -f $dir_path/EXTRACTED ]]; then
-    echo Already unarchived $file_path
+    echo "Already unarchived $file_path"
   else
     file=$(basename $file_path)
     pushd $dir_path
